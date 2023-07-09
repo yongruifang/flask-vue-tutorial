@@ -1,42 +1,103 @@
 <script setup>
 import {onMounted, ref} from 'vue';
 import axios from 'axios';
+import { defineStore } from 'pinia'
+const useGameStore = defineStore('games', ()=>{
+  //定义管理游戏数据的state
+  const gameList = ref([
+  {
+    'title': 'War',
+    'genre': 'Tom',
+    'played': 'false',
+  },
+  {
+    'title': '4399',
+    'genre': 'Tom',
+    'played': 'false',
+  },
+  ])
+  //定义action函数
+  const addGame = (game)=>{
+    gameList.value.push(game);
+  }
+  const deleteGame = (game) => {
+    //找到下标值
+    const itemIndex = gameList.value.findIndex((item)=>item['title']===game['title']);
+    //数组过滤来删除元素
+    gameList.value.splice(itemIndex,1);
+  }
+  const updateGame = (game) => {
+    //找到下标值
+    const itemIndex = gameList.value.findIndex((item)=>item['title']===game['title']);
+    // console.log(gameList.value[itemIndex]['title']);
+    gameList.value[itemIndex] = game;
+  }
+  return {
+    gameList,
+    addGame,
+    deleteGame,
+    updateGame,
+  }
+})
+const gameStore = useGameStore()
 const tableData = ref()
 const path = 'http://192.168.133.130:5000/games'
 const getGames = ()=>{
-    axios.get(path).then((res)=>{
-        tableData.value = res.data.games;
-    })
+    // axios.get(path).then((res)=>{
+    //     tableData.value = res.data.games;
+    // })
+    tableData.value = gameStore.gameList;
 }
 const addGame = (payload) => {
-    axios.post(path,payload).then((res)=>{
-        console.log(res.data);
-        message.value = res.data.message;
-        getGames();
-        ElMessage({
-            message: message.value,
-            type: 'success',
-        })
+    // axios.post(path,payload).then((res)=>{
+    //     console.log(res.data);
+    //     message.value = res.data.message;
+    //     getGames();
+    //     ElMessage({
+    //         message: message.value,
+    //         type: 'success',
+    //     })
+    // })
+    gameStore.addGame(payload);
+    message.value = "game has added!";
+    getGames();
+    ElMessage({
+        message: message.value,
+        type : 'success',
     })
 }
-const deleteGame = (game_id)=>{
-    axios.delete(path+'/'+game_id).then((res)=>{
-        getGames();
-        message.value = res.data.message;
-        ElMessage({
-            message: message.value,
-            type: 'success',
-        })
+const deleteGame = (game)=>{
+    // axios.delete(path+'/'+game_id).then((res)=>{
+    //     getGames();
+    //     message.value = res.data.message;
+    //     ElMessage({
+    //         message: message.value,
+    //         type: 'success',
+    //     })
+    // })
+    gameStore.deleteGame(game);
+    getGames();
+    message.value = "game has deleted!";
+    ElMessage({
+        message: message.value,
+        type : 'success',
     })
 }
 const updateGame = (payload)=>{
-    axios.put(path+'/'+payload.id,payload).then((res)=>{
-        message.value = res.data.message;
-        getGames();
-        ElMessage({
-            message: message.value,
-            type: 'success',
-        })
+    // axios.put(path+'/'+payload.id,payload).then((res)=>{
+    //     message.value = res.data.message;
+    //     getGames();
+    //     ElMessage({
+    //         message: message.value,
+    //         type: 'success',
+    //     })
+    // })
+    gameStore.updateGame(payload);
+    getGames();
+    message.value = "game has updated!";
+    ElMessage({
+        message: message.value,
+        type : 'success',
     })
 }
 const editGame = (game)=>{
@@ -115,7 +176,7 @@ const updateSubmit = () => {
                         <!-- 要拿到对应的Id，必须通过使用作用域插槽来实现操作列的渲染 -->
                         <template v-slot="scope">
                             <el-button round type="primary" size="small" @click="editGame(scope.row)">update</el-button>
-                            <el-button round type="danger" size="small" @click="deleteGame(scope.row.id)">delete</el-button>
+                            <el-button round type="danger" size="small" @click="deleteGame(scope.row)">delete</el-button>
                         </template>
                     </el-table-column>
                 </el-table>
@@ -161,7 +222,9 @@ const updateSubmit = () => {
                 <el-input placeholder="enter genre" v-model="updateGameForm.genre"></el-input>
             </el-form-item>
             <el-form-item label="played?">
-                <el-checkbox label="yes" v-model="updateGameForm.played">{{ updateGameForm.played }}</el-checkbox>
+                <el-checkbox label="yes" v-model="updateGameForm.played">
+                    {{ updateGameForm.played }}
+                </el-checkbox>
             </el-form-item>
             <el-form-item>
                 <el-button type="primary" @click="updateSubmit">Submit</el-button>
@@ -177,7 +240,7 @@ const updateSubmit = () => {
     width:100%;		
     height:100%;		
     background-size:100% 100%;
-    /* position:fixed; */
+    position:fixed;
 }
 #content{
     margin-left:20px;
