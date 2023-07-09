@@ -1,5 +1,5 @@
 # flask-vue-tutorial
-![艺术](https://img-blog.csdnimg.cn/507ee2ff794946b1851b54f1ba86cadb.png)
+![封面](https://img-blog.csdnimg.cn/0f756163f4dc4d899433b3667a18d2c1.png)
 
 # 0. 环境
 1. OS: `Ubuntu20.04`
@@ -341,7 +341,8 @@ def remove_game(game_id):
 5. API的实现, 发送请求，刷新数据，消息提示
 ![uixm](https://img-blog.csdnimg.cn/e123af5b44214ad08cd67f598a0a90a6.png)
 
-# 5. [预览网址](https://sparkling-frangollo-b5c2ea.netlify.app/)📖
+# 5. 预览
+[预览网址](https://sparkling-frangollo-b5c2ea.netlify.app/)📖
 部署在Netlify上
 为了简单，去掉了flask后端，使用pinia来进行状态管理
 可以查看源码的front分支
