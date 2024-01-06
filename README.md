@@ -3,7 +3,7 @@
 
 
 # 预览
-[预览网址](https://sparkling-frangollo-b5c2ea.netlify.app/)📖
+[https://vue-flask-todo.netlify.app](https://vue-flask-todo.netlify.app)📖
 
 # 博客文章
 [CSDN](https://blog.csdn.net/iftodayhappy/article/details/131580368)
